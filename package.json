@@ -1,0 +1,54 @@
+{
+  "name": "bitlego",
+  "displayName": "BitLego",
+  "version": "0.1.0",
+  "description": "",
+  "keywords": [
+    "bit",
+    "lego"
+  ],
+  "homepage": "https://github.com/BitLego/BitLego_Server",
+  "bugs": {
+    "url": "https://github.com/BitLego/BitLego_Server/issues",
+    "email": "sbeinone@gmail.com"
+  },
+  "author": {
+    "name": "BeINone",
+    "email": "sbeinone@gmail.com",
+    "url": "https://github.com/BeINone"
+  },
+  "contributors": [
+    {
+      "name": "Ss5h",
+      "url": "http://ipod1597.tistory.com"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/BitLego/BitLego_Server"
+  },
+  "scripts": {
+    "vscode:prepublish": "node ./node_modules/vscode/bin/compile",
+    "compile": "node ./node_modules/vscode/bin/compile -watch -p ./"
+  },
+  "dependencies": {
+    "async": "^2.6.0",
+    "body-parser": "^1.18.2",
+    "bson": "^1.0.4",
+    "express": "^4.16.2",
+    "express-session": "^1.15.6",
+    "hooks-fixed": "^2.0.2",
+    "ipfs-api": "^23.0.0",
+    "kareem": "^2.0.0-rc0",
+    "lodash.get": "^4.4.2",
+    "mongoose": "^4.10.8",
+    "mpath": "^0.3.0",
+    "mpromise": "^0.5.5",
+    "mquery": "^3.0.0-rc0",
+    "multer": "^1.3.0",
+    "muri": "^1.3.0",
+    "regexp-clone": "0.0.1",
+    "resolve-from": "^4.0.0",
+    "sliced": "^1.0.1"
+  }
+}
