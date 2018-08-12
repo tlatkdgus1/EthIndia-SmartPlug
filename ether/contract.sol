@@ -1,5 +1,5 @@
 pragma solidity ^0.4.17;
-//   conract is invoked from a trusted and verified source
+//   contract is invoked from a trusted and verified source
 //   args{hash id, int usage, int limit, address addr }
 //   store ethers
 //   pay ethers to the user
@@ -28,16 +28,19 @@ contract smartPlugPayment{
     function setLimit(uint16 _limit) public{
         limit = _limit;
     }
+    //set electron
+    function setElectron(uint32 _elec) public{
+        electron = _elec;
+    }
     //deposits ether in the contract
-    function deposit(uint256 amount) payable public{
-        require(msg.value == amount);
-    } 
+    function deposit() payable public{
+    }
      //function to get the current balance of the contract
     function getBalance() public view returns(uint256){
         return address(this).balance;
     }
     function payUser(address user_addr) payable public {
-        user_addr.call.value(msg.value).gas(20317)();
+        user_addr.transfer(msg.value);
     }
     function generateMoney() public view returns(uint32){
          //logic for coin generation and payment
@@ -48,7 +51,4 @@ contract smartPlugPayment{
              return 0;
          }
     }
-   
-    
 }
-

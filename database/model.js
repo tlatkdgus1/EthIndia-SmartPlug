@@ -22,3 +22,4 @@ exports.IpfsSchema = new Schema({
 	date: String,
 	ipfs_hash: String, 
 });
+

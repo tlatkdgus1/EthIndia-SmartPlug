@@ -20,6 +20,47 @@ var contracts = JSON.parse(source)['contracts'];
 contracts = contracts['contract.sol:smartPlugPayment'];
 const abi = JSON.parse(contracts['abi']);
 const code = '0x' + contracts['bin'];
+const mod = require('../ether/deploy');
+
+let balance;
+let smartPlug;
+let accounts;
+let web3;
+let address;
+const init = async () => {
+  smartPlug = await mod.contract;
+  web3 = await mod.returnweb3;
+  accounts = await web3.eth.getAccounts();
+};
+init();
+
+const deposited = async (index) => {
+ address =  await smartPlug.methods.deposit().send({
+    from: accounts[index],
+    value: web3.utils.toWei('1', 'ether')
+  });
+  await console.log("Deposit successful")
+}
+
+const setCurr = async (_curr) => {
+  await smartPlug.methods.setCurr(_curr).call({
+    from: accounts[2]
+  });
+}
+
+const setPrev = async (_prev) => {
+  await smartPlug.methods.setPrev(_prev).call({
+    from: accounts[2]
+  });
+}
+
+
+const payUser = async (address) => {
+  await smartPlug.methods.payUser.call({
+    from: accounts[0]
+  });
+  console.log("Users paid");
+}
 
 router.post('/register', (req, res) => {
 		console.log(req.body);
@@ -47,6 +88,21 @@ router.post('/register', (req, res) => {
 			}
 		});
 	});
+router.post('/deposit', (req, res) => {
+	console.log(req.body);
+
+                User.find({session: req.body.session}, (err, user) => {
+                        if(user[0]){
+                                user = user[0];
+                                Device.update({serial_number: req.body.serial_number}, {$set: {sc_addr:address}}, function(err,device) {
+					if(!err){
+						res.send({'status': true});
+					}
+				});
+			}
+		});
+});
+
 
 router.post('/list', (req, res) => {
 		console.log(req.body);
@@ -88,6 +144,8 @@ String.prototype.lpad = function(padString, length) {
         str = padString + str;
     return str;
 }
+var curr_usage;
+var prev_usage;
 router.post('/set_usage', (req, res) => {
 		console.log(req.body);
 		User.find({session: req.body.session}, (err, user) => {
@@ -116,6 +174,12 @@ router.post('/set_usage', (req, res) => {
 							}else{
 								console.log(_ipfs);
 								res.send({'status':true});
+								usage =(req.body.date_usage.toString().split("\"usage\"\ :")[1]);
+                                                                usage = usage.split("\n")[0]
+                                                                curr_usage = usage.replace(/(^\s*)|(\s*$)/gi, ""); //currunt usage
+								Device.update({'serial_number': req.body.serial_number}, {$set:{'usage':curr_usage}}, function(err, result) {
+									console.log(result);
+								});	
 							}
 						});
 					}
@@ -161,7 +225,20 @@ router.post('/get_usage', (req, res) => {
                         }
                 });
 });
+router.get('/payUser', (req, res) => {
+		var payAddr = new Array();
+		var limit = 1000;
+		var device;
+		Device.find({}, (err, devices) =>{
+			for(var device in devices){
+				if(parseInt(device.usage) < limit){
+					payAddr.push(device.addr);
+				}
+			}
+			payUser(payAddr);
+		});
 
+});
 router.post('/user_get_usage', (req, res) => {
                 console.log(req.body);
                 User.find({session: req.body.session}, (err, user) => {
