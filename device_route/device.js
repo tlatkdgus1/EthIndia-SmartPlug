@@ -34,11 +34,12 @@ const init = async () => {
 };
 init();
 
-const deposited = async (index) => {
+const deposit = async (index) => {
  address =  await smartPlug.methods.deposit().send({
     from: accounts[index],
-    value: web3.utils.toWei('1', 'ether')
+    value: 1000000
   });
+	await  console.log("Addr", address);
   await console.log("Deposit successful")
 }
 
@@ -90,7 +91,7 @@ router.post('/register', (req, res) => {
 	});
 router.post('/deposit', (req, res) => {
 	console.log(req.body);
-
+		deposit(2);
                 User.find({session: req.body.session}, (err, user) => {
                         if(user[0]){
                                 user = user[0];
@@ -174,11 +175,12 @@ router.post('/set_usage', (req, res) => {
 							}else{
 								console.log(_ipfs);
 								res.send({'status':true});
-								usage =(req.body.date_usage.toString().split("\"usage\"\ :")[1]);
+								usage =((req.body.data_usage).toString().split("\"usage\"\ :")[1]);
                                                                 usage = usage.split("\n")[0]
                                                                 curr_usage = usage.replace(/(^\s*)|(\s*$)/gi, ""); //currunt usage
 								Device.update({'serial_number': req.body.serial_number}, {$set:{'usage':curr_usage}}, function(err, result) {
-									console.log(result);
+console.log("test");									
+console.log(result);
 								});	
 							}
 						});
@@ -230,8 +232,11 @@ router.get('/payUser', (req, res) => {
 		var limit = 1000;
 		var device;
 		Device.find({}, (err, devices) =>{
+			console.log(devices);
 			for(var device in devices){
-				if(parseInt(device.usage) < limit){
+				console.log(device);
+				console.log(device.data_usage);
+				if(parseInt(device.data_usage) < limit){
 					payAddr.push(device.addr);
 				}
 			}
