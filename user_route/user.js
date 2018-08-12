@@ -33,7 +33,7 @@ router.post('/signup', (req, res) => {
 router.post('/login', (req, res) => {
 		console.log(req.body);
 		User.find({ user_id: req.body.user_id, user_pass: crypto.createHash('sha512').update(req.body.user_pass).digest('base64') }, (err, user) => {
-				
+				console.log(user);
 				user = user[0];
 				if(err){
 					res.send({'status':false, 'err':"user find err"});
@@ -48,6 +48,7 @@ router.post('/login', (req, res) => {
 				session_id = String(sha.digest('hex'));
 				User.update({_id:user._id},{$set: {session:session_id}},function(err, result) {
 					if(!err){
+						console.log(session_id);
 						res.send( {'status': true, 'session': session_id} );
 					}else{
 						res.send({'status':false, 'err':"session update err"});
@@ -57,8 +58,8 @@ router.post('/login', (req, res) => {
 				});
 });
 
-router.post('/coin', (req, res) => {
-		user_session = req.headers.session;
+router.post('/inform', (req, res) => {
+		user_session = req.body.session;
 		if (user_session === undefined){
 		res.send({'status':false, 'err': "can't user find"});
 		}else{

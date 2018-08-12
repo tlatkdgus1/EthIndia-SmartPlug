@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en" >
+
+<head>
+  <meta charset="UTF-8">
+  <title>dashBoto -dashboard</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+
+  
+  
+      <link rel="stylesheet" href="css/style.css">
+
+  
+</head>
+
+<body>
+
+  <div class="option">
+<div class="logo">
+  <div class="dashboto-logo">
+  <p>d</p>
+  <p>B</p>
+  </div>
+  <p class="logo">Dashboard</p>
+  <div class="user-id"></div>
+</div>
+      <p class="tagline">Track your lightning coins.</p>
+<button class="main">Cryto Dashboard</button>
+  <div class="clear"></div>
+    <ul class="menu">
+    <a href="">
+      <i class="fa fa-dashboard"></i>
+      Dashboard
+    </a>
+    <br>
+     <a href="">
+      <i class="fa fa-tasks"></i>
+      Electricity Usage
+    </a>
+     <a href="">
+      <i class="fa fa-book"></i>
+      Invoice Tool
+    </a>
+    <a href="">
+      <i class="fa fa-newspaper-o"></i>
+      News
+    </a>
+    <a href="">
+      <i class="fa fa-money"></i>
+      Donate
+    </a>
+  </ul>
+</div>
+
+
+<div class="dashboard-heading">
+  <div class="panel">
+    <i class="fa fa-bell"><bold>1</bold></i>
+    <div ng-app="app" ng-controller="coin">
+  <p class="btc-price"></p>
+</div>
+  </div>
+  <div class="all">
+    <div class="starter-stats">
+      <div class="blok">
+        <i class="fa fa-money"></i>
+        <div class="no">
+        <p>Asset Types</p>
+        <p>1</p>
+          </div>
+      </div>
+      
+      <div class="blok">
+        <i class="fa fa-money kl"></i>
+        <div class="no">
+        <p>Total Lightningcoins</p>
+        <p></p>
+          </div>
+      </div>
+      
+      <div class="blok">
+        <i class="fa fa-money pl"></i>
+        <div class="no">
+        <p>Usage</p>
+        <p class="user_usage"></p>
+          </div>
+      </div>
+      <div class="clear"></div>
+        <div class="gains">
+          <canvas id="myChart"></canvas>
+        </div>
+      
+    </div>
+    
+  </div>
+  
+</div>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.6/angular.js'></script>
+
+<script>
+                 var _data = new Object();
+		_data.session  = sessionStorage.session;
+ 
+                 $.ajax({
+                     url: 'http://blockchain.gachon.ac.kr/user/inform',
+                     type: 'POST',
+                     dataType: 'json',
+                     data: _data,
+                     success: function (data, textStatus, xhr) {
+                         $(".user-id").text(data.user_id);
+                     },
+                     error: function (xhr, textStatus, errorThrown) {
+                         console.log('Error in Operation');
+                     }
+                 });
+		_data.date = "20180812"
+                 $.ajax({
+                     url: 'http://blockchain.gachon.ac.kr/device/user_get_usage',
+                     type: 'POST',
+                     dataType: 'json',
+                     data: _data,
+                     success: function (data, textStatus, xhr) {
+			console.log(data.usage);
+                         $(".user_usage").text(data.usage);
+                     },
+                     error: function (xhr, textStatus, errorThrown) {
+                         console.log('Error in Operation');
+                     }
+                 });
+
+</script>  
+
+    <script  src="js/index.js"></script>
+
+
+
+
+</body>
+
+</html>

@@ -13,6 +13,7 @@ db();
 
 app.use('/user', userRouter);
 app.use('/device', deviceRouter);
+app.use(express.static('views'));
 
 app.listen(80, () => {
   console.log('Express App on port 80!');

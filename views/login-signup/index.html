@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en" >
+
+<head>
+  <meta charset="UTF-8">
+  <title>Smart Plug Proof of Concept</title>
+  
+  
+  <link rel='stylesheet' href='http://cdn.jsdelivr.net/jquery.slick/1.6.0/slick.css'>
+
+      <link rel="stylesheet" href="css/style.css">
+
+  
+</head>
+
+<body>
+
+  <div class="main-box">
+  <div class="slider-cont">
+    <div class="signup-slider">
+      <div class="img-txt">
+        <div class="img-layer"></div>
+        <h1>We use smart plugs for regulating your daily electricity and...</h1>
+        <img src="images/smart_plug.jpg"/>
+      </div>
+      <div class="img-txt">
+        <div class="img-layer"></div>
+        <h1>pay you for your nobel initiatives for saving electricity!</h1>
+        <img src="images/eth.png"/>
+      </div>
+      <div class="img-txt">
+        <div class="img-layer"></div>
+        <h1>Join US Now!</h1>
+        <img src=""/>
+      </div>
+    </div>
+  </div>
+  
+  
+  <div class="form-cont">
+
+    <div class="top-buttons">
+      <button class="to-signup top-active-button">
+        Sign Up
+      </button>
+      <button class="to-signin">
+        Sign In
+      </button>
+    </div>
+    
+    <div class="form form-signup">
+      <form action="http://blockchain.gachon.ac.kr/user/signup
+" enctype="application/x-www-form-urlencoded" method="POST">
+        <lable>FULL NMAE</lable>
+        <input type="text" 
+               placeholder="Your full name"
+               name = "user_id"
+		id = "user_id">
+        <lable>E-MAIL</lable>
+        <input type="email" 
+               placeholder="Your e-mail"
+               name = "user_email"
+		id = "user_email">
+        <lable>PASSWORD</lable>
+        <input type="password" 
+               placeholder="Your password"
+               name = "user_pass"
+		id="user_pass">
+        <p class="terms">
+          <input type="checkbox">
+          I agree all statments in 
+          <a href="#" class="lined-link">terms of service</a>
+        </p>
+        <input type="button"
+	       id="signup"
+               class="form-btn"
+               value="Sign Up"/>
+        <a href="#" class="lined-link to-signin-link">I'm already member</a>
+      </form>
+    </div>
+
+    <div class="form form-signin">
+      <form action="http://blockchain.gachon.ac.kr/user/login
+" enctype="application/x-www-form-urlencoded" method="post">
+        <lable>E-MAIL</lable>
+        <input type="email" 
+               placeholder="Your e-mail"
+		id="user_idl"
+               name = "user_id">
+        <lable>PASSWORD</lable>
+        <input type="password" 
+               placeholder="Your password"
+		id = "user_passl"
+               name = "user_pass">
+
+        <input type="button"
+               class="form-btn signin"
+		id="signin"
+               value="Sign In"/>
+               
+               
+        <a href="#" class="lined-link to-signup-link">Create new account</a>
+      </form>
+    </div>
+  </div>
+  <div class="clear-fix"></div>
+</div>
+  <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
+<script src='https://cdn.jsdelivr.net/jquery.slick/1.6.0/slick.min.js'></script>
+<script>
+ $(document).ready(function () {
+
+             $("#signin").click(function () {
+                
+                 var _data = new Object();
+                 _data.user_id = $('#user_idl').val();
+                 _data.user_pass = $('#user_passl').val();
+
+ 
+
+                 $.ajax({
+                     url: 'http://blockchain.gachon.ac.kr/user/login',
+                     type: 'POST',
+                     dataType: 'json',
+                     data: _data,
+                     success: function (data, textStatus, xhr) {
+                         if(data.status == true){
+				sessionStorage.session = data.session;
+				console.log(sessionStorage.session);
+				window.location.href="http://blockchain.gachon.ac.kr/dashboard";
+			}else{
+				alert("check your id,pass");
+			}
+                     },
+                     error: function (xhr, textStatus, errorThrown) {
+                         console.log('Error in Operation');
+                     }
+                 });
+             });
+
+             $("#signup").click(function () {
+
+                 var _data = new Object();
+                 _data.user_id = $('#user_id').val();
+                 _data.user_pass = $('#user_pass').val();
+		_data.user_email = $ ('#user_email').val();
+
+
+                 $.ajax({
+                     url: 'http://blockchain.gachon.ac.kr/user/signup',
+                     type: 'POST',
+                     dataType: 'json',
+                     data: _data,
+                     success: function (data, textStatus, xhr) {
+                         if(data.status == true){
+				alert("signup successful");
+                        }else{
+                                alert("check your id,pass");
+                        }
+                     },
+                     error: function (xhr, textStatus, errorThrown) {
+                         console.log('Error in Operation');
+                     }
+                 });
+             });
+
+         });
+</script>
+  
+
+    <script  src="js/index.js"></script>
+
+
+
+
+</body>
+
+</html>

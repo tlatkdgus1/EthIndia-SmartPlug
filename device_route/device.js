@@ -24,7 +24,7 @@ const code = '0x' + contracts['bin'];
 router.post('/register', (req, res) => {
 		console.log(req.body);
 
-		User.find({session: req.headers.session}, (err, user) => {
+		User.find({session: req.body.session}, (err, user) => {
 			if(user[0]){
 				user = user[0];
 				Device.find({serial_number: req.body.serial_number},( err,device) => {
@@ -50,7 +50,7 @@ router.post('/register', (req, res) => {
 
 router.post('/list', (req, res) => {
 		console.log(req.body);
-		User.find({session: req.headers.session}, (err, user) => {
+		User.find({session: req.body.session}, (err, user) => {
 			if(user[0]){
 				user = user[0];
 				Device.find({user_id: user.user_id}, (err, device) =>{
@@ -90,7 +90,7 @@ String.prototype.lpad = function(padString, length) {
 }
 router.post('/set_usage', (req, res) => {
 		console.log(req.body);
-		User.find({session: req.headers.session}, (err, user) => {
+		User.find({session: req.body.session}, (err, user) => {
 			if(user[0]){
 				user = user[0];
 				now = calcTime('+5.5') // in india
@@ -127,7 +127,7 @@ router.post('/set_usage', (req, res) => {
 
 router.post('/get_usage', (req, res) => {
                 console.log(req.body);
-                User.find({session: req.headers.session}, (err, user) => {
+                User.find({session: req.body.session}, (err, user) => {
                         if(user[0]){
                                 user = user[0];
 				Device.find({user_id: user.user_id}, (err, device) =>{
@@ -162,10 +162,46 @@ router.post('/get_usage', (req, res) => {
                 });
 });
 
+router.post('/user_get_usage', (req, res) => {
+                console.log(req.body);
+                User.find({session: req.body.session}, (err, user) => {
+                        if(user[0]){
+                                user = user[0];
+                                Device.find({user_id: user.user_id}, (err, device) =>{
+                                        if(err){
+                                                res.send({'status': false, 'err':'device get err'});
+                                        }else{
+                                                Ipfs.find({user_id: user.user_id, date: req.body.date}, (err, _ipfs) =>{
+                                                        if(err){
+                                                                res.send({'status':false, 'err': 'ipfs get err'});
+                                                        }else{
+                                                                console.log(_ipfs[0]);
+                                                                ipfs.cat(_ipfs[0]['ipfs_hash'], function(err, result) {
+                                                                        if(err){
+                                                                                res.send({'status':false, 'err':'ipfs cat err'});
+                                                                        }else{
+                                                                                usage =(result.toString().split("\"usage\"\ :")[1]);
+                                                                                usage = usage.split("\n")[0]
+                                                                                usage = usage.replace(/(^\s*)|(\s*$)/gi, "");
+
+                                                                                console.log(req.body.date+ ": "+usage.toString());
+										res.send({'status': true, 'usage':usage.toString()});
+
+                                                                        }
+
+                                                                })
+                                                        }
+                                                });
+                                        }
+                                });
+
+                        }
+                });
+});
 
 router.post('/init_usage', (req, res) => {
                 console.log(req.body);
-                User.find({session: req.headers.session}, (err, user) => {
+                User.find({session: req.body.session}, (err, user) => {
                         if(user[0]){
                                 user = user[0];
 
